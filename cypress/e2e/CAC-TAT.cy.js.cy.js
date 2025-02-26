@@ -179,46 +179,49 @@ describe('Central de Atendimento ao Cliente TAT', () => {
       })
   })
 
-  // RESOLVER Lesson 06 - Exercício extra 1 ↓
+  // Lesson 06 - Exercício extra 1 ↓
   it('CT-017 → seleciona um arquivo simulando um drag-and-drop', () => {
-    
+    cy.get('#file-upload')
+      .selectFile('cypress/fixtures/example.json', { action: 'drag-drop' })
+      .should(input => {
+        expect(input[0].files[0].name).to.equal('example.json')
+    })
   })
 
-  // RESOLVER Lesson 06 - Exercício extra 2 ↓
-  it.only('CT-018 → seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', () => {
-      
+  // Lesson 06 - Exercício extra 2 ↓
+  it('CT-018 → seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', () => {
+    cy.fixture('example.json')
+      .as('sampleFile')
+    cy.get('#file-upload')
+    .selectFile('@sampleFile')
+    .should(input => {
+      expect(input[0].files[0].name).to.equal('example.json')
+    })  
+  
   })
 
-
-
-
-
-
-
-  // RESOLVER Lesson 07 ↓
+  // Lesson 07 - Exercício ↓
   it('CT-019 → verifica que a política de privacidade abre em outra aba sem a necessidade de um clique', () => {
-      
+    cy.contains('a', 'Política de Privacidade')
+      .should('have.attr', 'href', 'privacy.html')
+      .and('have.attr', 'target', '_blank')
   })
 
+  // Lesson 07 - Exercício extra 1 ↓
   it('CT-020 → acessa a página da política de privacidade removendo o target e então clicando no link', () => {
-      
+    cy.contains('a', 'Política de Privacidade')
+      .invoke('removeAttr', 'target')
+      .click()
+
+    cy.contains('h1', 'CAC TAT - Política de Privacidade').should('be.visible')
   })
 
-  it('CT-021 → testa a página da política de privacidade de forma independente', () => {
-      
-  })
+  // Lesson 07 - Exercício extra 2 - Desafio ↓
+  // Foi criado um novo arquivo chamado "privacy.cy.js" na pasta e2e
 
-   // Lesson 08 ↓
-  it('CT-021 → ', () => {
-      
-  })
-
+  // Lesson 08 ↓
+  // 
   it('CT-022 → ', () => {
       
   })
-
-  it('CT-023 → ', () => {
-      
-  })
-
 })
