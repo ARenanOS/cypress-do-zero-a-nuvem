@@ -1,23 +1,28 @@
+// Estrutura básica para a suite de testes ↓
 describe('Central de Atendimento ao Cliente TAT', () => {
   beforeEach(() => {
+    // Visitando a URL diretamente do projeto CAC - TAT em cada teste (it) iniciado
     cy.visit('./src/index.html')
   })
 
+  // Lesson 01 - Exercício ↓
   it('CT-001 → verifica o título da aplicação', () => {
     cy.title().should('be.equal', 'Central de Atendimento ao Cliente TAT')
   })
 
+  // Lesson 02 - Exercício e Exercício extra 1 ↓
   it('CT-002 → preenche os campos obrigatórios e envia o formulário', () => {
-    const longText = Cypress._.repeat('abcdefghijklmnopqrstuvwxyz', '10')
+    //const longText = Cypress._.repeat('abcdefghijklmnopqrstuvwxyz', '10')
     cy.get('#firstName').type('Antonio Renan', { delay: 20})
     cy.get('#lastName').type('Oliveira Sarmento', { delay: 0})
     cy.get('#email').type('renan.teste@gmail.com', { delay: 0})
-    cy.get('#open-text-area').type('Gostaria de expressar minha sincera gratidão por todo o apoio e dedicação. Foi uma experiência incrível, e fiquei muito impressionado com a maneira como as coisas foram conduzidas. Cada detalhe, cada conversa, e até os momentos mais desafiadores, fizeram toda a diferença e me ajudaram a crescer. Agradeço imensamente pelo tempo e esforço investidos em mim, e por fazerem dessa jornada algo tão significativo. Espero poder retribuir de alguma forma e continuar aprendendo com todos vocês. Muito obrigado!', { delay: 0})
+    cy.get('#open-text-area').type('Gostaria de expressar minha sincera gratidão por todo o apoio e dedicação!', { delay: 0})
     cy.get('button[type="submit"]').click()
     
     cy.get('.success').should('be.visible')
   })
 
+  // Lesson 02 - Exercício extra 2 ↓
   it('CT-003 →  exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', () => {
     cy.get('#firstName').type('Antonio Renan')
     cy.get('#lastName').type('Oliveira Sarmento')
@@ -28,22 +33,26 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.get('.error').should('be.visible')
   })
 
+  // Lesson 02 - Exercício extra 3 ↓
   it('CT-004 →  campo telefone continua vazio quando preenchido com um valor não-numérico', () => {
     cy.get('#phone')
       .type('abcde')
       .should('have.value', '')
   })
 
+  // Lesson 02 - Exercício extra 4 e Lesson 05 - Exercício extra ↓
   it('CT-005 →  exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', () => {
     cy.get('#firstName').type('Antonio Renan')
     cy.get('#lastName').type('Oliveira Sarmento')
     cy.get('#email').type('renan.teste@gmail.com')
     cy.get('#open-text-area').type('teste')
-    cy.get('#phone-checkbox').click()
+    cy.get('#phone-checkbox').check()
     cy.get('button[type="submit"]').click()
+    
     cy.get('.error').should('be.visible')
   })
 
+  // Lesson 02 - Exercício extra 5 ↓
   it('CT-006 → preenche e limpa os campos nome, sobrenome, email e telefone', () => {
     cy.get('#firstName')
       .type('Antonio Renan')
@@ -66,4 +75,150 @@ describe('Central de Atendimento ao Cliente TAT', () => {
       .clear()
       .should('have.value', '')
   })
+
+  // Lesson 02 - Exercício extra 6 ↓
+  it('CT-007 → exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', () => {
+    cy.contains('button', 'Enviar').click()
+      
+    cy.get('.error').should('be.visible')
+  })
+
+  // Lesson 02 - Exercício extra 7.1 ↓
+  it('CT-008.1 → envia o formuário com sucesso usando um comando customizado 1.0', () => {
+    cy.fillMandatoryFieldsAndSubmit()
+
+    cy.get('.success').should('be.visible')
+  })
+  // Lesson 02 - Exercício extra 7.2 ↓
+  it('CT-008.2 → envia o formuário com sucesso usando um comando customizado 2.0 recebendo um argumento', () => {
+    const data = {
+      firstName: 'Renata',
+      lastName: 'Sarmento',
+      email: 'renata.sarmento@gmail.com',
+      text: 'Teste com dados da Renata'
+    }
+
+    cy.fillMandatoryFieldsAndSubmitTwo(data)
+
+    cy.get('.success').should('be.visible')
+  })
+
+  // Lesson 02 - Exercício extra 7.3 ↓
+  it('CT-008.3 → envia o formuário com sucesso usando um comando customizado 3.0 com um valor padrão', () => {
+    cy.fillMandatoryFieldsAndSubmitThree()
+
+    cy.get('.success').should('be.visible')
+  })
+
+// Lesson 02 - Exercício extra 8 ↓
+  it('CT-009 → identificar o elemento com o cy.contains', () => {
+    cy.get('#firstName').type('Antonio Renan')
+    cy.get('#lastName').type('Oliveira Sarmento')
+    cy.get('#email').type('renan.teste@gmail.com')
+    cy.get('#open-text-area').type('a.')
+    cy.contains('button', 'Enviar').click()
+    
+    cy.get('.success').should('be.visible')
+  })
+
+  //  Lesson 03 - Exercício ↓
+  it('CT-010 → seleciona um produto (YouTube) por seu texto', () => {
+    cy.get('#product')
+      .select('YouTube')
+      .should('have.value', 'youtube')
+  })
+
+  //  Lesson 03 - Exercício extra 1 ↓
+  it('CT-011 → seleciona um produto (Mentoria) por seu valor (value)', () => {
+    cy.get('#product')
+      .select('mentoria')
+      .should('have.value', 'mentoria')
+  })
+
+  //  Lesson 03 - Exercício extra 2 ↓
+  it('CT-012 → seleciona um produto (Blog) por seu índice', () => {
+    cy.get('#product')
+      .select(1)
+      .should('have.value', 'blog')
+  })
+
+  //  Lesson 04 - Exercício ↓
+  it('CT-013 → marca o tipo de atendimento "Feedback"', () => {
+    cy.get('input[type="radio"][value="feedback"]')
+      .check()
+      .should('be.checked')
+  })
+
+  //  Lesson 04 - Exercício extra ↓
+  it('CT-014 → marca cada tipo de atendimento', () => {
+    cy.get('input[type="radio"]')
+      .each(typeOfService => {
+        cy.wrap(typeOfService)
+          .check()
+          .should('be.checked')
+      })
+  })
+
+  // Lesson 05 - Exercício ↓
+  it('CT-015 → marca ambos checkboxes, depois desmarca o último', () => {
+    cy.get('input[type="checkbox"]')
+      .check()
+      .should('be.checked')
+      .last()
+      .uncheck()
+      .should('not.be.checked')
+  })
+
+  // Lesson 06 - Exercício ↓
+  it('CT-016 → seleciona um arquivo da pasta fixtures', () => {
+    cy.get('#file-upload')
+      .selectFile('cypress/fixtures/example.json')
+      .should(input => {
+        console.log(input[0].files[0].name),
+        expect(input[0].files[0].name).to.equal('example.json')
+      })
+  })
+
+  // RESOLVER Lesson 06 - Exercício extra 1 ↓
+  it('CT-017 → seleciona um arquivo simulando um drag-and-drop', () => {
+    
+  })
+
+  // RESOLVER Lesson 06 - Exercício extra 2 ↓
+  it.only('CT-018 → seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', () => {
+      
+  })
+
+
+
+
+
+
+
+  // RESOLVER Lesson 07 ↓
+  it('CT-019 → verifica que a política de privacidade abre em outra aba sem a necessidade de um clique', () => {
+      
+  })
+
+  it('CT-020 → acessa a página da política de privacidade removendo o target e então clicando no link', () => {
+      
+  })
+
+  it('CT-021 → testa a página da política de privacidade de forma independente', () => {
+      
+  })
+
+   // Lesson 08 ↓
+  it('CT-021 → ', () => {
+      
+  })
+
+  it('CT-022 → ', () => {
+      
+  })
+
+  it('CT-023 → ', () => {
+      
+  })
+
 })
