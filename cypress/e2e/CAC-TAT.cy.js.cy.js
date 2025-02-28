@@ -219,9 +219,10 @@ describe('Central de Atendimento ao Cliente TAT', () => {
   // Lesson 07 - Exercício extra 2 - Desafio ↓
   // Foi criado um novo arquivo chamado "privacy.cy.js" na pasta e2e
 
-  // Lesson 08 ↓
-  // 
-  it('CT-022 → ', () => {
-      
-  })
+  // Lesson 08 ↓  
+  // Foram criados dois scripts no arquivo package.json. 
+  // Um que abre o Cypress Runner simulando um dispositivo com 410 pixels de largura e 860 pixels de altura.
+  // Outro que roda os testes em modo headless, simulando um dispositivo com 410 pixels de largura e 860 pixels de altura.
+  // Também foi adicionado a propriedade video: true ao arquivo de configurações do Cypress (cypress.config.js), logo abaixo da propriedade e2e.
+
 })
