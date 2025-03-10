@@ -267,11 +267,13 @@ describe('Central de Atendimento ao Cliente TAT', () => {
   // Lesson 07 - Exercício extra 2 - Desafio ↓
   // Foi criado um novo arquivo chamado "privacy.cy.js" na pasta e2e
 
+
   // Lesson 08 ↓  
   // Foram criados dois scripts no arquivo package.json. 
   // Um que abre o Cypress Runner simulando um dispositivo com 410 pixels de largura e 860 pixels de altura.
   // Outro que roda os testes em modo headless, simulando um dispositivo com 410 pixels de largura e 860 pixels de altura.
   // Também foi adicionado a propriedade video: true ao arquivo de configurações do Cypress (cypress.config.js), logo abaixo da propriedade e2e.
+
 
   // Lesson 12 - Exercício
   // Foram adicionadas as funções cy.clock() e cy.tick() nos testes que de validação manipulando o tempo acelerando a velocidade do teste.
@@ -299,10 +301,24 @@ describe('Central de Atendimento ao Cliente TAT', () => {
   
   // Lesson 12 - Exercício extra 3
 
-  it.only('CT-023 → preenche o campo da área de texto usando o comando invoke.', () => {
+  it('CT-023 → preenche o campo da área de texto usando o comando invoke.', () => {
     cy.get('#open-text-area')
       .invoke('val', 'Um texto qualquer')
       .should('have.value', 'Um texto qualquer')
+  })
+
+// Lesson 12 - Exercício extra 4
+  it('CT-024 → faz uma requisição HTTP', () => {
+    cy.request('https://cac-tat-v3.s3.eu-central-1.amazonaws.com/index.html')
+      .as('getRequest')
+      .its('status')
+      .should('be.equal', 200)
+    cy.get('@getRequest')
+      .its('statusText')
+      .should('be.equal', 'OK')
+    cy.get('@getRequest')   
+      .its('body')  
+      .should('include', 'CAC TAT') 
   })
 
 })
