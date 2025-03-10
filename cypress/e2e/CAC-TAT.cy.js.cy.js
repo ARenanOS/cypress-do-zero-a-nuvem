@@ -12,18 +12,27 @@ describe('Central de Atendimento ao Cliente TAT', () => {
 
   // Lesson 02 - Exercício e Exercício extra 1 ↓
   it('CT-002 → preenche os campos obrigatórios e envia o formulário', () => {
-    //const longText = Cypress._.repeat('abcdefghijklmnopqrstuvwxyz', '10')
+    cy.clock()
+
+    const longText = Cypress._.repeat('abcdefghijklmnopqrstuvwxyz', '10')
+    
     cy.get('#firstName').type('Antonio Renan', { delay: 20})
     cy.get('#lastName').type('Oliveira Sarmento', { delay: 0})
     cy.get('#email').type('renan.teste@gmail.com', { delay: 0})
-    cy.get('#open-text-area').type('Gostaria de expressar minha sincera gratidão por todo o apoio e dedicação!', { delay: 0})
+    cy.get('#open-text-area').type(longText, { delay: 0})
     cy.get('button[type="submit"]').click()
     
     cy.get('.success').should('be.visible')
+
+    cy.tick(3000)
+    
+    cy.get('.success').should('not.be.visible')
   })
 
   // Lesson 02 - Exercício extra 2 ↓
   it('CT-003 →  exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', () => {
+    cy.clock()
+    
     cy.get('#firstName').type('Antonio Renan')
     cy.get('#lastName').type('Oliveira Sarmento')
     cy.get('#email').type('renan.teste@gmail,com')
@@ -31,6 +40,10 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.get('button[type="submit"]').click()
       
     cy.get('.error').should('be.visible')
+
+    cy.tick(3000)
+
+    cy.get('.error').should('not.be.visible')
   })
 
   // Lesson 02 - Exercício extra 3 ↓
@@ -42,6 +55,8 @@ describe('Central de Atendimento ao Cliente TAT', () => {
 
   // Lesson 02 - Exercício extra 4 e Lesson 05 - Exercício extra ↓
   it('CT-005 →  exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', () => {
+    cy.clock()
+    
     cy.get('#firstName').type('Antonio Renan')
     cy.get('#lastName').type('Oliveira Sarmento')
     cy.get('#email').type('renan.teste@gmail.com')
@@ -50,6 +65,10 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.get('button[type="submit"]').click()
     
     cy.get('.error').should('be.visible')
+
+    cy.tick(3000)
+
+    cy.get('.error').should('not.be.visible')
   })
 
   // Lesson 02 - Exercício extra 5 ↓
@@ -78,16 +97,28 @@ describe('Central de Atendimento ao Cliente TAT', () => {
 
   // Lesson 02 - Exercício extra 6 ↓
   it('CT-007 → exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', () => {
+    cy.clock()
+    
     cy.contains('button', 'Enviar').click()
       
     cy.get('.error').should('be.visible')
+
+    cy.tick(3000)
+
+    cy.get('.error').should('not.be.visible')
   })
 
   // Lesson 02 - Exercício extra 7.1 ↓
   it('CT-008.1 → envia o formuário com sucesso usando um comando customizado 1.0', () => {
+    cy.clock()
+    
     cy.fillMandatoryFieldsAndSubmit()
 
     cy.get('.success').should('be.visible')
+
+    cy.tick(3000)
+
+    cy.get('.success').should('not.be.visible')
   })
   // Lesson 02 - Exercício extra 7.2 ↓
   it('CT-008.2 → envia o formuário com sucesso usando um comando customizado 2.0 recebendo um argumento', () => {
@@ -97,21 +128,34 @@ describe('Central de Atendimento ao Cliente TAT', () => {
       email: 'renata.sarmento@gmail.com',
       text: 'Teste com dados da Renata'
     }
+    cy.clock()
 
     cy.fillMandatoryFieldsAndSubmitTwo(data)
 
     cy.get('.success').should('be.visible')
+    
+    cy.tick(3000)
+
+    cy.get('.success').should('not.be.visible')
   })
 
   // Lesson 02 - Exercício extra 7.3 ↓
   it('CT-008.3 → envia o formuário com sucesso usando um comando customizado 3.0 com um valor padrão', () => {
+    cy.clock()
+    
     cy.fillMandatoryFieldsAndSubmitThree()
 
     cy.get('.success').should('be.visible')
+
+    cy.tick(3000)
+
+    cy.get('.success').should('not.be.visible')
   })
 
 // Lesson 02 - Exercício extra 8 ↓
-  it('CT-009 → identificar o elemento com o cy.contains', () => {
+  it('CT-009 → identifica o elemento com o cy.contains', () => {
+    cy.clock()
+
     cy.get('#firstName').type('Antonio Renan')
     cy.get('#lastName').type('Oliveira Sarmento')
     cy.get('#email').type('renan.teste@gmail.com')
@@ -119,6 +163,10 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.contains('button', 'Enviar').click()
     
     cy.get('.success').should('be.visible')
+    
+    cy.tick(3000)
+
+    cy.get('.success').should('not.be.visible')
   })
 
   //  Lesson 03 - Exercício ↓
@@ -224,5 +272,37 @@ describe('Central de Atendimento ao Cliente TAT', () => {
   // Um que abre o Cypress Runner simulando um dispositivo com 410 pixels de largura e 860 pixels de altura.
   // Outro que roda os testes em modo headless, simulando um dispositivo com 410 pixels de largura e 860 pixels de altura.
   // Também foi adicionado a propriedade video: true ao arquivo de configurações do Cypress (cypress.config.js), logo abaixo da propriedade e2e.
+
+  // Lesson 12 - Exercício
+  // Foram adicionadas as funções cy.clock() e cy.tick() nos testes que de validação manipulando o tempo acelerando a velocidade do teste.
+  // Com a funcinalidade cy.clock(), você pode "congelar" 🧊 o relógio do navegador.
+  // E com a funcionalidade cy.tick(), você pode avançar no tempo. 🕒
+
+  // Lesson 12 - Exercício extra 2
+
+  it('CT-023 → exibe e oculta as mensagens de sucesso e erro usando .invoke()', () => {
+    cy.get('.success')
+      .should('not.be.visible')
+      .invoke('show')
+      .should('be.visible')
+      .and('contain', 'Mensagem enviada com sucesso.')
+      .invoke('hide')
+      .should('not.be.visible')
+    cy.get('.error')
+      .should('not.be.visible')
+      .invoke('show')
+      .should('be.visible')
+      .and('contain', 'Valide os campos obrigatórios!')
+      .invoke('hide')
+      .should('not.be.visible')
+  })
+  
+  // Lesson 12 - Exercício extra 3
+
+  it.only('CT-023 → preenche o campo da área de texto usando o comando invoke.', () => {
+    cy.get('#open-text-area')
+      .invoke('val', 'Um texto qualquer')
+      .should('have.value', 'Um texto qualquer')
+  })
 
 })
